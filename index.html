@@ -1,0 +1,36 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Web MIDI Console</title>
+  <meta name="description" content="Web MIDI Console">
+  <meta name="author" content="Factotumo">
+
+  <link rel="stylesheet" href="s.css">
+  <script src="jquery-2.1.4.js" type="text/javascript"></script>
+  <script src="jsrender.js" type="text/javascript"></script>
+  <script type="text/javascript" src="index.js"></script>
+
+</head>
+
+<body>
+  
+  <div id="midiInsContainer">
+  <h1>MIDI Inputs</h1>
+	<script id="midiInputs" type="text/x-jsrender">
+	{{:port.manufacturer} {:port.name}}
+	</script>
+  </div>
+
+  <div id="midiMessagesContainer">
+  <h2>MIDI Messages</h2>
+  <form id="midiMessages">
+  	<textarea rows="50" cols="80" name="console">MIDI messages display here</textarea>
+  </form>
+  </div>
+
+  
+</body>
+</html>

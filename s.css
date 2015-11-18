@@ -1,0 +1,17 @@
+body {
+	font-family: sans-serif;
+}
+
+h1 {
+	font-size: 2em;
+}
+
+#midiInsContainer {
+	width: 20%;
+	margin-right: 12px;
+	float: left;
+}
+
+#midiMessagesContainer {
+
+}
