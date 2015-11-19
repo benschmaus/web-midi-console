@@ -1,52 +1,73 @@
+var midi = {
 
-// request MIDI access
-if (navigator.requestMIDIAccess) {
-    navigator.requestMIDIAccess({
-        sysex: false // this defaults to 'false' and we won't be covering sysex in this article. 
-    }).then(onMIDISuccess, onMIDIFailure);
-} else {
-    alert("No MIDI support in your browser.");
-}
-
-// midi functions
-function onMIDISuccess(midiAccess) {
-    // when we get a succesful response, run this code
+onMIDISuccess: function(midiAccess) {
     console.log('MIDI Access Object', midiAccess);
+    //console.log(this);
 
-    var midiIn = midiAccess.inputs;
+    var self = this;
+    midiAccess.onstatechange = function(e) {
+        self.onMIDIAccessChange(e);
+    }
+    this.midiAccess = midiAccess;
+    this.initInputs();
+},
 
-    var numIns = midiIn.size;
+initInputs: function() {    
+    var self = this;
 
-    var midiInsDiv = document.getElementById("midiIns");
+    $("#midiIns").empty();
 
-    midiInsDiv.innerHTML = "<div>MIDI inputs: " + numIns + "</div>";
+    var html = "";  
+    this.midiAccess.inputs.forEach(
+        function(port, key) {
+            
+            console.log(port);            
+            var tmpl = $.templates(
+                "{{:port.manufacturer}} {{:port.name}}"
+            );
+            html += tmpl.render({ "port": port });
 
-    midiIn.forEach(
-    	function(port, key) {
-    		console.log(port);
-    		midiInsDiv.innerHTML += port.manufacturer +  " " + port.name + " - <span id='state'>" + port.state + "</span>";
-    		port.onmidimessage = onMIDIMessage;
-    		port.onstatechange = onStateChange;
-    	}
+            port.onmidimessage = function(m) { self.onMIDIMessage(m); };
+            port.onstatechange = function(e) { self.onPortStateChange(e); };
+        }
     );
-}
+    $("#midiIns").html(html);
+},
 
-function onMIDIFailure(e) {
+onMIDIAccessChange: function(e) {
+    console.log(e);
+    //console.log(this);
+    this.initInputs();
+},
+
+onMIDIFailure: function(e) {
     // when we get a failed response, run this code
     console.log("No access to MIDI devices or your browser doesn't support WebMIDI API. Please use WebMIDIAPIShim " + e);
-}
+},
 
-function onStateChange(event) {
+onPortStateChange: function(event) {
 	console.log(event);
-	document.getElementById("state").innerHTML = event.port.state;
-}
+},
 
-function onMIDIMessage(message) {
+onMIDIMessage: function(message) {
+    console.log(message);
+
 	var data = message.data;
-	var console = document.getElementById("midiMessages").elements["console"];
-	console.value = data + "\n" + console.value;
+	var msgConsole = document.getElementById("midiMessages").elements["console"];
+    msgConsole.value = data + "\n" + msgConsole.value;
 }
 
-function write(str) {
-	document.writeln(str);
+};
+
+if (navigator.requestMIDIAccess) {
+
+    navigator.requestMIDIAccess({
+        sysex: false
+    }).then(
+        function(midiAccess) { midi.onMIDISuccess(midiAccess); },
+        function(e) { midi.onMIDIFailure(e); }
+    );
+
+} else {
+    alert("No MIDI support in your browser.");
 }

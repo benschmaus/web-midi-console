@@ -3,13 +3,20 @@ body {
 }
 
 h1 {
+	margin-top: 0;
+	margin-bottom: 12px;
+	padding: 0;
 	font-size: 2em;
 }
 
-#midiInsContainer {
+#midiInsOutsContainer {
 	width: 20%;
 	margin-right: 12px;
 	float: left;
+}
+
+#midiIns {
+	margin-bottom: 24px;
 }
 
 #midiMessagesContainer {

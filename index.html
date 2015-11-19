@@ -17,15 +17,19 @@
 
 <body>
   
-  <div id="midiInsContainer">
-  <h1>MIDI Inputs</h1>
-	<script id="midiInputs" type="text/x-jsrender">
-	{{:port.manufacturer} {:port.name}}
-	</script>
+  <div id="midiInsOutsContainer">
+  
+  <h1>MIDI Ins</h1>
+	
+  <div id="midiIns"></div>
+
+  <h1>MIDI Outs</h1>
+
+  <div id="midiOuts"></div>
+
   </div>
 
   <div id="midiMessagesContainer">
-  <h2>MIDI Messages</h2>
   <form id="midiMessages">
   	<textarea rows="50" cols="80" name="console">MIDI messages display here</textarea>
   </form>
