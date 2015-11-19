@@ -9,8 +9,8 @@ h1 {
 	font-size: 2em;
 }
 
-#midiInsOutsContainer {
-	width: 20%;
+#midiPortsContainer {
+	width: 25%;
 	margin-right: 12px;
 	float: left;
 }

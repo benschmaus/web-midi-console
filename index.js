@@ -9,21 +9,21 @@ onMIDISuccess: function(midiAccess) {
         self.onMIDIAccessChange(e);
     }
     this.midiAccess = midiAccess;
-    this.initInputs();
+    this.initPorts();
 },
 
-initInputs: function() {    
+initPorts: function() {    
     var self = this;
 
-    $("#midiIns").empty();
-
-    var html = "";  
+    $("#midiPorts").empty();
+    
+    var html = "";
     this.midiAccess.inputs.forEach(
         function(port, key) {
             
             console.log(port);            
             var tmpl = $.templates(
-                "{{:port.manufacturer}} {{:port.name}}"
+                "<div>{{:port.name}}</div>"
             );
             html += tmpl.render({ "port": port });
 
@@ -31,18 +31,18 @@ initInputs: function() {
             port.onstatechange = function(e) { self.onPortStateChange(e); };
         }
     );
-    $("#midiIns").html(html);
+    $("#midiPorts").html(html);
 },
 
 onMIDIAccessChange: function(e) {
     console.log(e);
     //console.log(this);
-    this.initInputs();
+    this.initPorts();
 },
 
 onMIDIFailure: function(e) {
     // when we get a failed response, run this code
-    console.log("No access to MIDI devices or your browser doesn't support WebMIDI API. Please use WebMIDIAPIShim " + e);
+    alert("No access to MIDI devices or your browser doesn't support WebMIDI API. Please use WebMIDIAPIShim " + e);
 },
 
 onPortStateChange: function(event) {
@@ -52,9 +52,10 @@ onPortStateChange: function(event) {
 onMIDIMessage: function(message) {
     console.log(message);
 
+    var port = message.target;
 	var data = message.data;
 	var msgConsole = document.getElementById("midiMessages").elements["console"];
-    msgConsole.value = data + "\n" + msgConsole.value;
+    msgConsole.value = port.name + ": " + data + "\n" + msgConsole.value;
 }
 
 };
