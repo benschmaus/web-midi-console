@@ -10,12 +10,12 @@ h1 {
 }
 
 #midiPortsContainer {
-	width: 25%;
+	width: 225px;
 	margin-right: 12px;
 	float: left;
 }
 
-#midiIns {
+#midiinputs {
 	margin-bottom: 24px;
 }
 
