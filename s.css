@@ -13,6 +13,7 @@ h1 {
 	width: 225px;
 	margin-right: 12px;
 	float: left;
+	height: 800px;
 }
 
 #midiinputs {
@@ -21,4 +22,13 @@ h1 {
 
 #midiMessagesContainer {
 
+}
+
+#jsTerm {
+	margin-bottom: 8px;
+}
+
+#messageBox {
+	width: 640px;
+	height: 350px;
 }

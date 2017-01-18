@@ -8,18 +8,74 @@
   <meta name="description" content="Web MIDI Console">
   <meta name="author" content="Factotumo">
 
-  <link rel="stylesheet" href="s.css">
+  <link rel="stylesheet" href="s.css"/>
   <script src="jquery-2.1.4.js" type="text/javascript"></script>
   <script src="jsrender.js" type="text/javascript"></script>
   <script type="text/javascript" src="index.js"></script>
+  <script type="text/javascript" src="jquery.terminal-0.11.23.min.js"></script>
+  <link href="jquery.terminal-0.11.23.css" rel="stylesheet"/>
+
+  <style type="text/css">
+  .terminal, .cmd {
+      background: white;
+      color: #000;
+  }
+  .terminal {
+    border: 1px solid #999;
+  }
+  .terminal .inverted, .cmd .inverted, .cmd .cursor.blink {
+      background-color: #000;
+      color: white;
+  }
+  @-webkit-keyframes terminal-blink {
+    0%, 100% {
+        background-color: #fff;
+        color: #000;
+    }
+    50% {
+        background-color: #0e0;
+        color: #fff;
+    }
+  }
+  @-ms-keyframes terminal-blink {
+    0%, 100% {
+        background-color: #fff;
+        color: #000;
+    }
+    50% {
+        background-color: #0e0;
+        color: #fff;
+    }
+  }
+  @-moz-keyframes terminal-blink {
+    0%, 100% {
+        background-color: #fff;
+        color: #000;
+    }
+    50% {
+        background-color: #0e0;
+        color: #fff;
+    }
+  }
+  @keyframes terminal-blink {
+    0%, 100% {
+        background-color: #fff;
+        color: #000;
+    }
+    50% {
+        background-color: #000;
+        color: #fff;
+    }
+  }
+  </style>
 
 </head>
 
 <body>
 
-  <p>Console app for Chrome that uses the <a href="https://webaudio.github.io/web-midi-api/">Web MIDI API</a> to display connected MIDI devices and messages sent from them.</p>
+  <p>Chrome app that uses the <a href="https://webaudio.github.io/web-midi-api/">Web MIDI API</a> for viewing messages from connected MIDI devices and sending messages to them.</p>
 
-  <p>More details <a href="https://factotumo.com/2015/11/midi-console-using-web-midi-api/">here</a> or see source code on <a href="https://github.com/benschmaus/web-midi-console">GitHub</a>.</p>
+  <p>Source at <a href="https://github.com/benschmaus/web-midi-console">GitHub</a>.</p>
   
   <div id="midiPortsContainer">
   
@@ -33,7 +89,8 @@
 
   <div id="midiMessagesContainer">
   <form id="midiMessages">
-  	<textarea rows="50" cols="80" name="console">MIDI messages display here</textarea>
+    <div id="jsTerm"></div>
+  	<textarea id="messageBox" rows="25" cols="50" name="console">MIDI messages received from inputs display here</textarea>
   </form>
   </div>
 

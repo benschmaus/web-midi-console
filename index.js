@@ -92,7 +92,6 @@ registerPort: function(port) {
 },
 
 onMIDIFailure: function(e) {
-    // when we get a failed response, run this code
     alert("No access to MIDI devices or your browser doesn't support WebMIDI API. Please use WebMIDIAPIShim " + e);
 },
 
@@ -107,18 +106,121 @@ onMIDIMessage: function(message) {
 	var data = message.data;
 	var msgConsole = document.getElementById("midiMessages").elements["console"];
     msgConsole.value = port.name + ": " + data + "\n" + msgConsole.value;
+},
+
+initTerminal: function() {
+    jQuery(function($, undefined) {
+    $('#jsTerm').terminal(function(command, term) {
+        if (command !== '') {
+            try {
+                var result = window.eval(command);
+                if (result !== undefined) {
+                    term.echo(new String(result));
+                }
+            } catch(e) {
+                term.error(new String(e));
+            }
+        } else {
+           term.echo('');
+        }
+    }, {
+        greetings: "Send messages to outputs here. Type 'help()' for list of commands.",
+        name: 'MIDI Console',
+        height: 150,
+        // adjust width relative to textarea
+        width: parseInt($("#messageBox").css("width").substring(0, 3)) - 16,
+        prompt: '> '
+    });
+  });
 }
 
 };
 
+// status bytes on channel 1
+var messages = {
+    off: 128,
+    on: 144,
+    pp: 160,
+    cc: 176,
+    pc: 192,
+    cp: 208,
+    pb: 224
+}
+
+var device = function(outputName) {
+   this.current = midi.outputs[outputName];
+   this.channel = 1;
+   
+   // makes device visible inside of nested function defs
+   var self = this;
+
+   this._send = function(status, b1, b2) {
+    self.current.send([status + (self.channel - 1), b1, b2]);
+    return self;
+   }
+
+   this.ch = function(channel) {
+      self.channel = channel;
+      return self;
+   }
+
+   this.cc = function(b1, b2) {
+    return self._send(messages.cc, b1, b2);
+   }
+
+   this.on = function(b1, b2) {
+    return self._send(messages.on, b1, b2);
+   }
+
+   this.off = function(b1, b2) {
+    return self._send(messages.off, b1, b2);
+   }
+
+   this.pp = function(b1, b2) {
+    return self._send(messages.pp, b1, b2);
+   }
+
+   this.cp = function(b1, b2) {
+    return self._send(messages.cp, b1, b2);
+   }
+
+   this.pc = function(b1, b2) {
+    return self._send(messages.pc, b1, b2);
+   }
+
+   this.panic = function() {
+    return self.cc(123, 0)
+   }
+
+   this.raw = function(data) {
+    return self._send(data);
+   }
+
+   this.toString = function() {
+    var s = "no connected devices";
+    if (typeof this.current != 'undefined') {
+        s = "sent to " + outputName;
+    }
+    return s;
+   }
+
+   return this;
+};
+
+function help() {
+  return "commands list here...";   
+}
+
 if (navigator.requestMIDIAccess) {
 
     navigator.requestMIDIAccess({
-        sysex: false
+        sysex: true
     }).then(
         function(midiAccess) { midi.onMIDISuccess(midiAccess); },
         function(e) { midi.onMIDIFailure(e); }
     );
+
+    midi.initTerminal();
 
 } else {
     alert("No MIDI support in your browser.");
