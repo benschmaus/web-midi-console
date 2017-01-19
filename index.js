@@ -126,7 +126,7 @@ initTerminal: function() {
     }, {
         greetings: "Send messages to outputs here. Type 'help()' for list of commands.",
         name: 'MIDI Console',
-        height: 150,
+        height: 200,
         // adjust width relative to textarea
         width: parseInt($("#messageBox").css("width").substring(0, 3)) - 16,
         prompt: '> '
@@ -154,8 +154,8 @@ var device = function(outputName) {
    // makes device visible inside of nested function defs
    var self = this;
 
-   this._send = function(status, b1, b2) {
-    self.current.send([status + (self.channel - 1), b1, b2]);
+   this._send = function(status, data) {
+    self.current.send([status + (self.channel - 1)].concat(data));
     return self;
    }
 
@@ -165,27 +165,27 @@ var device = function(outputName) {
    }
 
    this.cc = function(b1, b2) {
-    return self._send(messages.cc, b1, b2);
+    return self._send(messages.cc, [b1, b2]);
    }
 
    this.on = function(b1, b2) {
-    return self._send(messages.on, b1, b2);
+    return self._send(messages.on, [b1, b2]);
    }
 
    this.off = function(b1, b2) {
-    return self._send(messages.off, b1, b2);
+    return self._send(messages.off, [b1, b2]);
    }
 
    this.pp = function(b1, b2) {
-    return self._send(messages.pp, b1, b2);
+    return self._send(messages.pp, [b1, b2]);
    }
 
-   this.cp = function(b1, b2) {
-    return self._send(messages.cp, b1, b2);
+   this.cp = function(b1) {
+    return self._send(messages.cp, [b1]);
    }
 
-   this.pc = function(b1, b2) {
-    return self._send(messages.pc, b1, b2);
+   this.pc = function(b1) {
+    return self._send(messages.pc, [b1]);
    }
 
    this.panic = function() {
@@ -193,13 +193,14 @@ var device = function(outputName) {
    }
 
    this.raw = function(data) {
-    return self._send(data);
+    self.current.send(data);
+    return self;
    }
 
    this.toString = function() {
     var s = "no connected devices";
     if (typeof this.current != 'undefined') {
-        s = "sent to " + outputName;
+        s = "";
     }
     return s;
    }
@@ -207,8 +208,26 @@ var device = function(outputName) {
    return this;
 };
 
+function po(obj) {
+  return JSON.stringify(obj);
+}
+
 function help() {
-  return "commands list here...";   
+  return `
+device(outputName)  selects a MIDI output port
+ch(number)          set MIDI channel number (1-16) 
+on(note, vel)       send note on
+off(note, vel)      send note off
+cc(number, value)   send control change message
+pp(note, value)     send poly pressure
+cp(value)           send channel pressure
+pc(number)          send program change
+panic()             send all notes off
+raw(dataArray)      send array of data to selected output
+
+example:
+  device("Livid Minim Bluetooth").ch(15).cc(14, 42).cc(15, 42).cc(16, 42).cc(17, 42)
+`;  
 }
 
 if (navigator.requestMIDIAccess) {
