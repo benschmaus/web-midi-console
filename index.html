@@ -75,24 +75,41 @@
 
   <p><a href="https://webaudio.github.io/web-midi-api/">Web MIDI</a> Chrome app for viewing messages from connected MIDI devices and sending messages to them.</p>
 
+  <div id="midiMessagesContainer">
+  <form id="midiMessages">
+    <textarea id="messageBox" rows="25" cols="50" name="console">MIDI messages received from inputs display here</textarea>
+    <div id="jsTerm"></div>
+  </form>
+  </div>
 
   <div id="midiPortsContainer">
   
-  <h1>MIDI Inputs</h1>
-	<div id="midiinputs"></div>
+    <h1>MIDI Inputs</h1>
+	  <div id="midiinputs"></div>
 
-  <h1>MIDI Outputs</h1>
-  <div id="midioutputs"></div>
+    <h1>MIDI Outputs</h1>
+    <div id="midioutputs"></div>
 
-    <p class="source"><a href="https://github.com/benschmaus/web-midi-console">Source code</a></p>
+    <h1>Terminal Keyboard Shortcuts</h1>
+      
+      <ul>
+      <li><b>up arrow</b> - previous command from history</li>
+      <li><b>down arrow</b> - next command from history</li>
+      <li><b>ctrl + r</b> - search through command history</li>
+      <li><b>ctrl + g/esc</b> - cancel search</li>
+      <li><b>ctrl + a</b> - beginning of line</li>
+      <li><b>ctrl + e</b> - end of line</li>
+      <li><b>ctrl + k</b> - remove text from cursor to end of line and save in kill area</li>
+      <li><b>ctrl + y</b> - paste from kill area</li>
+      <li><b>shift + enter</b> - insert new line</li>
+      <li>more shortcuts <a href="http://terminal.jcubic.pl/api_reference.php#shortcuts">here</a></li>
+      </ul>
+    
+
+    <p class="smallp source"><a href="https://github.com/benschmaus/web-midi-console">Source code</a></p>
+
   </div>
 
-  <div id="midiMessagesContainer">
-  <form id="midiMessages">
-    <div id="jsTerm"></div>
-  	<textarea id="messageBox" rows="25" cols="50" name="console">MIDI messages received from inputs display here</textarea>
-  </form>
-  </div>
 
   
 </body>

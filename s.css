@@ -11,25 +11,39 @@ h1 {
 	font-size: 1.1em;
 }
 
+ul {
+	margin-left: 0;
+	padding-left: 20px;
+	font-size: small;
+}
+
+.smallp {
+	font-size: small;	
+}
+
 .source {
 	margin-top: 16px;
-	font-size: small;
 	font-style: italic;
 }
 
 #midiPortsContainer {
-	width: 225px;
-	margin-right: 12px;
+	width: 325px;
+	margin-left: 12px;
 	float: left;
-	height: 800px;
+	/*height: 800px;*/
 }
 
 #midiinputs {
 	margin-bottom: 24px;
 }
 
-#midiMessagesContainer {
+#midioutputs {
+	margin-bottom: 24px;
+}
 
+#midiMessagesContainer {
+	float: left;
+	margin-bottom: 16px
 }
 
 #jsTerm {
@@ -37,7 +51,7 @@ h1 {
 }
 
 #messageBox {
-	width: 640px;
+	width: 600px;
 	height: 350px;
 	font-family: courier;
 }

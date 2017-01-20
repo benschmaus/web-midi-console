@@ -126,7 +126,7 @@ initTerminal: function() {
     }, {
         greetings: "Send messages to outputs here. Type 'help()' for list of commands.",
         name: 'MIDI Console',
-        height: 200,
+        height: 225,
         // adjust width relative to textarea
         width: parseInt($("#messageBox").css("width").substring(0, 3)) - 16,
         prompt: '> '
@@ -155,7 +155,9 @@ var device = function(outputName) {
    var self = this;
 
    this._send = function(status, data) {
-    self.current.send([status + (self.channel - 1)].concat(data));
+    var messageArr = [status + (self.channel - 1)].concat(data);
+    console.log("sending " + messageArr + " to " + self.current.name);
+    self.current.send(messageArr);
     return self;
    }
 
@@ -192,6 +194,24 @@ var device = function(outputName) {
     return self.cc(123, 0)
    }
 
+   this.rpn = function(b1, b2) {
+    return self.cc(101, b1 >> 7)
+        .cc(100, b1 & 127)
+        .cc(6, b2 >> 7)
+        .cc(38, b2 & 127)
+        .cc(101, 127)
+        .cc(100, 127);
+   }
+
+   this.nrpn = function(b1, b2) {
+    return self.cc(99, b1 >> 7)
+        .cc(98, b1 & 127)
+        .cc(6, b2 >> 7)
+        .cc(38, b2 & 127)
+        .cc(101, 127)
+        .cc(100, 127);
+   }   
+
    this.raw = function(data) {
     self.current.send(data);
     return self;
@@ -212,18 +232,36 @@ function po(obj) {
   return JSON.stringify(obj);
 }
 
+function po2(obj) {
+    var s = "{ ";
+    for (prop in obj) {
+        s += prop + "=";
+
+        var value = obj[prop];
+        if (typeof value == "object") {
+            s += po2(value);
+        } else {
+            s += value;
+        }
+        s += ", ";
+    }
+    return s.substring(0, s.length-1) + " }";
+}
+
 function help() {
   return `
 device(outputName)  selects a MIDI output port
 ch(number)          set MIDI channel number (1-16) 
-on(note, vel)       send note on
-off(note, vel)      send note off
-cc(number, value)   send control change message
-pp(note, value)     send poly pressure
-cp(value)           send channel pressure
-pc(number)          send program change
+on(note, vel)       send note on for note (0-127) and velocity (0-127)
+off(note, vel)      send note off for note (0-127) and velocity (0-127)
+cc(number, value)   send CC number (0-127) and value (0-127)
+pp(note, value)     send poly pressure for note (0-127) with value (0-127)
+cp(value)           send channel pressure value (0-127)
+pc(number)          send program change number (0-127)
+rpn(number, value)  send rpn number (0-16383) and value (0-16383)
+nrpn(number, value) send nrpn number (0-16383) and value (0-16383)
 panic()             send all notes off
-raw(dataArray)      send array of data to selected output
+raw(dataArray)      send array of bytes to selected output
 
 example:
   device("Livid Minim Bluetooth").ch(15).cc(14, 42).cc(15, 42).cc(16, 42).cc(17, 42)
