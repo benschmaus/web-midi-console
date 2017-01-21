@@ -217,6 +217,29 @@ var device = function(outputName) {
     return self;
    }
 
+   // i'd like to support executing a user-defined callback that takes the device as a param
+   // ideally this would work with file:// URLs but a file input may be need to workaround
+   // browser security restrictions
+   // for example:
+   //  jquery-2.1.4.js:8630 XMLHttpRequest
+   //  cannot load file:///Users/bschmaus/code/web-midi-console/user-commands-example.js?_=1484963323002.
+   //  Cross origin requests are only supported for protocol schemes: http, data, chrome, chrome-extension,
+   //  https, chrome-extension-resource.
+   this.script = function(url) {
+     console.log(url);
+     
+//$("script").attr("id", "userCommands").attr("type", "text/javascript").attr("src", url)
+
+     $('#userCommandsContainer').append(
+       '<script type="text/javascript" src="' + url + '"></script>'
+     );
+
+     //console.log(userCommands);
+     //$('#userCommandsContainer').empty();
+    
+     return self;
+   }
+
    this.toString = function() {
     var s = "no connected devices";
     if (typeof this.current != 'undefined') {
@@ -250,21 +273,21 @@ function po2(obj) {
 
 function help() {
   return `
-device(outputName)  selects a MIDI output port
+device(outputName)  selects a MIDI output port, must always be called first!
 ch(number)          set MIDI channel number (1-16) 
-on(note, vel)       send note on for note (0-127) and velocity (0-127)
-off(note, vel)      send note off for note (0-127) and velocity (0-127)
-cc(number, value)   send CC number (0-127) and value (0-127)
+on(note, vel)       send note on for note (0-127) with velocity (0-127)
+off(note, vel)      send note off for note (0-127) with velocity (0-127)
+cc(number, value)   send CC number (0-127) with value (0-127)
 pp(note, value)     send poly pressure for note (0-127) with value (0-127)
 cp(value)           send channel pressure value (0-127)
 pc(number)          send program change number (0-127)
-rpn(number, value)  send rpn number (0-16383) and value (0-16383)
-nrpn(number, value) send nrpn number (0-16383) and value (0-16383)
+rpn(number, value)  send rpn number (0-16383) with value (0-16383)
+nrpn(number, value) send nrpn number (0-16383) with value (0-16383)
 panic()             send all notes off
 raw(dataArray)      send array of bytes to selected output
 
-example:
-  device("Livid Minim Bluetooth").ch(15).cc(14, 42).cc(15, 42).cc(16, 42).cc(17, 42)
+examples:
+  device("Device Output Name").ch(15).cc(14, 42).cc(15, 42).cc(16, 42).cc(17, 42)
 `;  
 }
 
