@@ -147,6 +147,11 @@ var messages = {
     pb: 224
 }
 
+function execScript(commands) {
+    alert(commands);
+    return commands;
+}
+
 var device = function(outputName) {
    this.current = midi.outputs[outputName];
    this.channel = 1;
@@ -217,25 +222,13 @@ var device = function(outputName) {
     return self;
    }
 
-   // i'd like to support executing a user-defined callback that takes the device as a param
-   // ideally this would work with file:// URLs but a file input may be need to workaround
-   // browser security restrictions
-   // for example:
-   //  jquery-2.1.4.js:8630 XMLHttpRequest
-   //  cannot load file:///Users/bschmaus/code/web-midi-console/user-commands-example.js?_=1484963323002.
-   //  Cross origin requests are only supported for protocol schemes: http, data, chrome, chrome-extension,
-   //  https, chrome-extension-resource.
    this.script = function(url) {
+     alert("running script");
      console.log(url);
      
-//$("script").attr("id", "userCommands").attr("type", "text/javascript").attr("src", url)
-
-     $('#userCommandsContainer').append(
-       '<script type="text/javascript" src="' + url + '"></script>'
+     $('#scriptsContainer').append(
+        $('<script type="text/javascript" src="' + url + '"></script>')
      );
-
-     //console.log(userCommands);
-     //$('#userCommandsContainer').empty();
     
      return self;
    }
