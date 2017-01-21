@@ -157,11 +157,13 @@ function execScript(commandExec) {
 
 var device = function(outputName) {
    this.current = midi.outputs[outputName];
-   selectedDevice = this.current;
    this.channel = 1;
    
    // makes device visible inside of nested function defs
    var self = this;
+   // makes device visible in global scope, used for remote script execution
+   // see execScript and script below
+   selectedDevice = this;
 
    this._send = function(status, data) {
     var messageArr = [status + (self.channel - 1)].concat(data);
