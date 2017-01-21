@@ -147,12 +147,15 @@ var messages = {
     pb: 224
 }
 
-// puts the selected output device in the global scope so it can be
-// easily accessed by invocations of execScript
-var selectedDevice = null;
-
-function execScript(commandExec) {
+function userCommands(commandExec) {
     return commandExec;
+}
+
+function exec(url) {
+  console.log("running script from: " + url);
+  $('#scriptsContainer').append(
+     $('<script type="text/javascript" src="' + url + '"></script>')
+  );
 }
 
 var device = function(outputName) {
@@ -161,9 +164,6 @@ var device = function(outputName) {
    
    // makes device visible inside of nested function defs
    var self = this;
-   // makes device visible in global scope, used for remote script execution
-   // see execScript and script below
-   selectedDevice = this;
 
    this._send = function(status, data) {
     var messageArr = [status + (self.channel - 1)].concat(data);
@@ -226,16 +226,6 @@ var device = function(outputName) {
    this.raw = function(data) {
     self.current.send(data);
     return self;
-   }
-
-   this.script = function(url) {
-     console.log("running script from: " + url);
-     
-     $('#scriptsContainer').append(
-        $('<script type="text/javascript" src="' + url + '"></script>')
-     );
-    
-     return self;
    }
 
    this.toString = function() {
