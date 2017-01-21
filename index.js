@@ -147,12 +147,17 @@ var messages = {
     pb: 224
 }
 
+// puts the selected output device in the global scope so it can be
+// easily accessed by invocations of execScript
+var selectedDevice = null;
+
 function execScript(commandExec) {
     return commandExec;
 }
 
 var device = function(outputName) {
    this.current = midi.outputs[outputName];
+   selectedDevice = this.current;
    this.channel = 1;
    
    // makes device visible inside of nested function defs

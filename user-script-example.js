@@ -1,5 +1,8 @@
-// don't end the device chain arg to execScript with a semi-colon!
+// access the selected device that started the chain using the
+// "selectedDevice" variable.
+//
+// and don't end the device chain arg to execScript with a semi-colon!
 execScript(
-  device("Livid Minim Bluetooth")
+  selectedDevice
     .ch(15).cc(10, 42)
 );
