@@ -147,8 +147,8 @@ var messages = {
     pb: 224
 }
 
-function userCommands(commandExec) {
-    return commandExec;
+function userCommands(commandFunc) {
+    return commandFunc();
 }
 
 function exec(url) {
