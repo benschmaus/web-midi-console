@@ -1,4 +1,4 @@
 execScript(
-	console.log("running user-defined execScript");
-	return device("Livid Minim Bluetooth");
+  device("Livid Minim Bluetooth")
+    .ch(15).cc(10, 42);
 );

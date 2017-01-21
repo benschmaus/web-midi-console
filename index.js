@@ -147,9 +147,8 @@ var messages = {
     pb: 224
 }
 
-function execScript(commands) {
-    alert(commands);
-    return commands;
+function execScript(commandExec) {
+    return commandExec;
 }
 
 var device = function(outputName) {
