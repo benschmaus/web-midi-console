@@ -1,2 +1,4 @@
 # web-midi-console
-Simple web app that uses the Web MIDI API to display connected MIDI devices and messages sent from them.
+Web MIDI Chrome app for viewing messages from connected MIDI devices and sending messages to them.
+
+Running at [factotumo.com/web-midi-console/](https://factotumo.com/web-midi-console/)
