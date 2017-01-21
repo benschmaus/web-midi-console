@@ -224,6 +224,7 @@ var device = function(outputName) {
    }   
 
    this.raw = function(data) {
+    console.log("sending raw data: " + data);
     self.current.send(data);
     return self;
    }
@@ -259,6 +260,48 @@ function po2(obj) {
     return s.substring(0, s.length-1) + " }";
 }
 
+function scriptHelp() {
+    return `
+exec(url)           run commands in external url
+
+You can run device chain commands from a remote url.
+To use this approach, the document located at the
+given url must return an invocation of the "userCommands"
+function, which itself takes a function as an argument.
+The body of the function passed to "userCommands" should
+contain your code.
+
+Here's a template:
+
+userCommands(
+  function() {
+    // your code here
+  }
+);
+
+And here's an example:
+
+userCommands(
+  function() {
+    var d = device("Livid Minim Bluetooth").ch(15);
+    for (var i = 10; i < 18; i++) {
+        d.cc(i, 42);
+    }
+  }
+);
+
+Note that you're free (but not required) to use any JavaScript
+you see fit in the passed function.  Or you can just have
+basic device chain manipulations similar to:
+
+userCommands(
+  function() {
+    device("MIDI Output Name").on(84, 127).cc(21, 100).off(84, 127);
+  }
+);
+`;
+}
+
 function help() {
   return `
 device(outputName)  selects a MIDI output port, must always be called first!
@@ -272,10 +315,19 @@ pc(number)          send program change number (0-127)
 rpn(number, value)  send rpn number (0-16383) with value (0-16383)
 nrpn(number, value) send nrpn number (0-16383) with value (0-16383)
 panic()             send all notes off
-raw(dataArray)      send array of bytes to selected output
+raw(dataArray)      send array of bytes
+exec(url)           run commands in external url, run scriptHelp() for detailed usage info
 
 examples:
   device("Device Output Name").ch(15).cc(14, 42).cc(15, 42).cc(16, 42).cc(17, 42)
+
+  exec("https://rawgit.com/benschmaus/web-midi-console/master/user-script-example
+.js")
+
+  device("Livid Minim Bluetooth").raw([190, 10, 42, 190, 11, 42, 190, 12, 42, 190
+, 13, 42])
+
+  (scroll up to see start of help.)
 `;  
 }
 
