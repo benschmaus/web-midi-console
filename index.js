@@ -223,8 +223,7 @@ var device = function(outputName) {
    }
 
    this.script = function(url) {
-     alert("running script");
-     console.log(url);
+     console.log("running script from: " + url);
      
      $('#scriptsContainer').append(
         $('<script type="text/javascript" src="' + url + '"></script>')
