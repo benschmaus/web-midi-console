@@ -197,6 +197,15 @@ var device = function(outputName) {
     return self._send(messages.cp, [b1]);
    }
 
+   this.pb = function(b1) {
+    return self._send(
+        messages.pb, [
+            b1 & 127,
+            b1 >> 7
+        ]
+    );
+   }
+
    this.pc = function(b1) {
     return self._send(messages.pc, [b1]);
    }
