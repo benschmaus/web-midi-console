@@ -321,6 +321,7 @@ cc(number, value)   send CC number (0-127) with value (0-127)
 pp(note, value)     send poly pressure for note (0-127) with value (0-127)
 cp(value)           send channel pressure value (0-127)
 pc(number)          send program change number (0-127)
+pb(value)           send pitch bend with value (0-16383)
 rpn(number, value)  send rpn number (0-16383) with value (0-16383)
 nrpn(number, value) send nrpn number (0-16383) with value (0-16383)
 panic()             send all notes off
